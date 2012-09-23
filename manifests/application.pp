@@ -69,20 +69,20 @@ define play::application($path, $sync = false, $ensure = running, $frameworkId =
 	  exec { "play-resolve-dependencies-${path}":                                                                                                                     
 	      command => "${play::play_path}/play dependencies ${syncArgument} ${path}",                                                         
 	      cwd     => "${path}",
-	      unless  => "test -f $path/server.pid",
+	      unless  => "/usr/bin/test -f $path/server.pid",
 	  }  
 
 	  exec { "start-play-application-${path}":                                                                                                                     
 	      command => "${play::play_path}/play start ${path} ${frameworkArgument} ${javaOptions}",
 	      cwd     => "${path}",
-	      unless  => "test -f $path/server.pid",
+	      unless  => "/usr/bin/test -f $path/server.pid",
 	  }
 	} else {
 		notice("Stopping play application from ${path}")
 		exec { "stop-play-application-${path}":                                                                                                                     
 	      command => "${play::play_path}/play stop ${path}",                                                         
 	      cwd     => "${path}",
-	      onlyif  => "test -f $path/server.pid",
+	      onlyif  => "/usr/bin/test -f $path/server.pid",
 	  }
 	}	
 }
