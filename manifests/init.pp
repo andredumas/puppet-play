@@ -41,7 +41,7 @@ class play ($version = "1.2.3") {
         command => "wget http://download.playframework.org/releases/play-${play_version}.zip",                                                         
         cwd     => "/tmp",
         creates => "/tmp/play-${play_version}.zip",                                                              
-		unless  => "test -d $play_path",
+		unless  => "/usr/bin/test -d $play_path",
 		require => [Package["wget"]]
     }
 
