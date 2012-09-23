@@ -38,7 +38,7 @@ class play ($version = "1.2.3") {
 	
 	notice("Installing Play ${play_version}")
 	exec { "download-play-framework":                                                                                                                     
-        command => "wget http://download.playframework.org/releases/play-${play_version}.zip",                                                         
+        command => "/usr/bin/wget http://download.playframework.org/releases/play-${play_version}.zip",                                                         
         cwd     => "/tmp",
         creates => "/tmp/play-${play_version}.zip",                                                              
 		unless  => "/usr/bin/test -d $play_path",
@@ -48,7 +48,7 @@ class play ($version = "1.2.3") {
 	exec {"unzip-play-framework":
 	    cwd     => "/opt",
         command => "/usr/bin/unzip /tmp/play-${play_version}.zip",
-        unless  => "test -d $play_path",
+        unless  => "/usr/bin/test -d $play_path",
         require => [ Package["unzip"], Exec["download-play-framework"] ],
 	}
 	
