@@ -1,7 +1,7 @@
 # Class: play
 #
 # This module manages play framework applications and modules.
-# The class itself installs Play 1.2.3 in /opt/play-1.2.3
+# The class itself installs Play 2.0.3 in /opt/play-2.0.3
 #
 # Actions:
 #  play::module checks the availability of a Play module. It installs
@@ -28,27 +28,28 @@
 #
 #  play::service { "bilderverwaltung" :
 #	path    => "/home/clement/demo/bilderverwaltung",
-#	require => [Jdk6["Java6SDK"], Play::Module["mongodb module"]]
+#	require => [package { "openjdk-7-jdk", Play::Module["mongodb module"]]
 #  }
 #
-class play ($version = "1.2.3") {
+class play ($version = "2.0.3") {
 	
 	$play_version = $version
 	$play_path = "/opt/play-${play_version}"
 	
 	notice("Installing Play ${play_version}")
+	
 	exec { "download-play-framework":                                                                                                                     
-        command => "/usr/bin/wget http://download.playframework.org/releases/play-${play_version}.zip",                                                         
+        command => "wget http://download.playframework.org/releases/play-${play_version}.zip",                                                         
         cwd     => "/tmp",
         creates => "/tmp/play-${play_version}.zip",                                                              
-		unless  => "/usr/bin/test -d $play_path",
+		unless  => "test -d $play_path",
 		require => [Package["wget"]]
     }
 
 	exec {"unzip-play-framework":
 	    cwd     => "/opt",
-        command => "/usr/bin/unzip /tmp/play-${play_version}.zip",
-        unless  => "/usr/bin/test -d $play_path",
+        command => "unzip /tmp/play-${play_version}.zip",
+        unless  => "test -d $play_path",
         require => [ Package["unzip"], Exec["download-play-framework"] ],
 	}
 	
@@ -59,13 +60,11 @@ class play ($version = "1.2.3") {
 		require => [Exec["unzip-play-framework"]]
 	}
 	
-	package {
-	    "unzip":
-	        ensure => installed
+	package { "unzip":
+		ensure => installed
 	}
 	
-	package {
-	    "wget":
-	        ensure => installed
+	package { "wget":
+		ensure => installed
 	}	
 }
