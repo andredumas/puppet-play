@@ -38,7 +38,11 @@ define play::service($path, $frameworkId = "", $javaOptions = "", $user = "root"
 	
 	file { "/etc/init/$title.conf":
 		content => template("play/play-upstart.erb"),
-		mode    => "0755",
+		mode    => "0644",
 	}
 
+	file { "/etc/init.d/$title":
+		ensure => link,
+		target => "/lib/init/upstart-job",
+	}
 }
