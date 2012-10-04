@@ -30,7 +30,7 @@
 #	  require => [Play::Module["mongodb module"]]
 #   }
 #
-define play::service($path, $frameworkId = "", $javaOptions = "", $user = "root", $group = "root") {
+define play::service($path, $javaOptions = "", $user = "root", $group = "root") {
 	include play
 	
 	# Make play_home accessible from the template
