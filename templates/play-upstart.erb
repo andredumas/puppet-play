@@ -18,13 +18,10 @@ env APP_HOME=<%= path %>
 env PLAY_HOME=<%= play_home %>
 env PORT=9000
 env ADDRESS=127.0.0.1
-env EXTRA="<%= javaOptions %>"
+env EXTRA=<%= javaOptions %>
 
-#start on (filesystem and net-device-up IFACE=lo) or runlevel [2345]
-#stop on runlevel [!2345]
-start on runlevel [2345]
-# Is this correct?
-stop on runlevel [06]
+start on (filesystem and net-device-up IFACE=lo) or runlevel [2345]
+stop on runlevel [!2345]
 
 respawn
 respawn limit 10 5
@@ -33,8 +30,8 @@ expect daemon
 
 pre-start script
     chdir $APP_HOME
-    rm RUNNING_PID || true
-    su - $USER -c "${PLAY_HOME}/play clean compile stage"
+    rm $APP_HOME/RUNNING_PID || true
+    su $USER -c "${PLAY_HOME}/play clean compile stage"
 end script
 
 exec start-stop-daemon --pidfile ${APP_HOME}/RUNNING_PID --chuid $USER:$GROUP --exec ${APP_HOME}/target/start --background --start -- -Dhttp.port=$PORT -Dhttp.address=$ADDRESS $EXTRA -server
