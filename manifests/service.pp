@@ -36,6 +36,8 @@ define play::service($path, $javaOptions = "", $user = "root", $group = "root") 
 	# Make play_home accessible from the template
 	$play_home = $play::play_path
 	
+	notice("Service: ${title}")
+	
 	file { "/etc/init/$title.conf":
 		content => template("play/play-upstart.erb"),
 		mode    => "0644",

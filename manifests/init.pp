@@ -36,7 +36,7 @@ class play ($version = "2.0.3") {
 	$play_version = $version
 	$play_path = "/opt/play-${play_version}"
 	
-	notice("Installing Play ${play_version}")
+	notice("Play ${play_version}")
 	
 	exec { "download-play-framework":                                                                                                                     
         command => "wget http://download.playframework.org/releases/play-${play_version}.zip",                                                         

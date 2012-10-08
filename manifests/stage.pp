@@ -1,4 +1,4 @@
-define play::stage($path, $user = "root") {
+define play::stage($path, $playUser = "root", $user = "root", $group = "root") {
   include play
   
   $play_home = $play::play_path
@@ -6,6 +6,21 @@ define play::stage($path, $user = "root") {
   exec {"stage":
   	command => "$play_home/play clean compile stage",
   	cwd => "${path}",
-  	user => "$user"
+  	user => "$playUser"
+  }
+  
+  file { "$path":
+  	mode => 644,
+  	recurse => true,
+  	owner => $user,
+  	group => $group,
+  	require => Exec["stage"]
+  }
+  
+  file { "$path/target/start":
+  	mode => 744,
+  	owner => $user,
+  	group => $group,
+  	require => [Exec["stage"], File["$path"]]
   }
 }
