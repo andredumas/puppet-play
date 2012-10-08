@@ -9,7 +9,7 @@ define play::stage($path, $playUser = "root", $user = "root", $group = "root") {
   	user => "$playUser"
   }
   
-  file { "$path":
+  file { "$path/target":
   	mode => 644,
   	recurse => true,
   	owner => $user,
