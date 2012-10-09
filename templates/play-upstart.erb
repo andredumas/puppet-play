@@ -1,6 +1,7 @@
-# Upstart script for Play 2.0 application <%= name %>.
+# NOTE: This file is managed by puppet. While it still can be managed manually,
+#       it's definitely not recommended.
 #
-# Based on work by https://gist.github.com/2204773
+# Upstart script for Play 2.0 application <%= name %>.
 #
 # Usage:
 #   start play
@@ -16,8 +17,8 @@ env USER=<%= user %>
 env GROUP=<%= group %>
 env APP_HOME=<%= path %>
 env PLAY_HOME=<%= play_home %>
-env PORT=9000
-env ADDRESS=127.0.0.1
+env PORT=<%= port %>
+env ADDRESS=<%= address %>
 env EXTRA=<%= javaOptions %>
 
 start on (filesystem and net-device-up IFACE=lo) or runlevel [2345]
@@ -30,8 +31,6 @@ expect daemon
 
 pre-start script
     chdir $APP_HOME
-    rm $APP_HOME/RUNNING_PID || true
-    su $USER -c "${PLAY_HOME}/play clean compile stage"
 end script
 
-exec start-stop-daemon --pidfile ${APP_HOME}/RUNNING_PID --chuid $USER:$GROUP --exec ${APP_HOME}/target/start --background --start -- -Dhttp.port=$PORT -Dhttp.address=$ADDRESS $EXTRA -server
+exec start-stop-daemon --chuid $USER:$GROUP --exec ${APP_HOME}/target/start --background --start -- -Dhttp.port=$PORT -Dhttp.address=$ADDRESS -Dpidfile.path=/dev/null -server $EXTRA

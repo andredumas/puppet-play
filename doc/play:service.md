@@ -5,27 +5,23 @@ Resource representing a Play application started as a service.
 
 Actions
 -------
-Launches Play application using a system service. 
-This resource handles a service script in _/etc/init.d/app_.
-
-The resource simply generates the scripts and add it as a Puppet Service.
+Registers a Play application as a system service. 
+This resource generates an upstart script to _/etc/init/app.conf_. It also generates a link
+in _/etc/init.d/app_ for backwards compatibility
 
 Parameters
 ----------
 
 * *path* :  mandatory, absolute path of the application.
-* *frameworkId* : the framework id to start the application (no framework id by default)
-* *javaOptions* : the java options to configure the JVM on which the application will run
+* *javaOptions* : Java options passed to the application on startup
+* *javaOptions* : Java options passed to the application on startup
+* *address* : The address for the application to bind to
+* *port* : The port for the aplication to gind to
 
 Examples
 --------
 
-	   play::service { "bilderverwaltung" :
-		  path => "/home/clement/demo/bilderverwaltung",
-		  require => [Jdk6["Java6SDK"], Play::Module["mongodb module"]]
-	   }
-
-TODO
-----
-
-* Support _enabled_ parameter (to stop the service).
+	play::service { "test-app-9000":
+		path => "/var/play/test-app",
+		require => Class["Play"],
+	}

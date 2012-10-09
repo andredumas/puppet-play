@@ -1,26 +1,36 @@
-define play::stage($path, $playUser = "root", $user = "root", $group = "root") {
+# Resource: play::stage
+# Compiles and prepares a Play application to run in a production environment as a system service 
+#
+# Parameters:
+# *path* :  mandatory, absolute path of the application.
+#
+# Sample Usage:
+# See included tests for sample usage
+#
+define play::stage($path) {
   include play
   
-  $play_home = $play::play_path
-  
   exec {"stage":
-  	command => "$play_home/play clean compile stage",
+  	command => "$play::play_path/play clean compile stage",
   	cwd => "${path}",
-  	user => "$playUser"
+  	user => "$play::user",
+  	creates => "$path/target/start",
+  	# Takes a really long to to compile on a micro EC2 instance, not sure why just yet
+  	timeout => 1200	
   }
   
   file { "$path/target":
   	mode => 644,
   	recurse => true,
-  	owner => $user,
-  	group => $group,
+  	owner => "$play::apps_user",
+  	group => "$play::apps_group",
   	require => Exec["stage"]
   }
   
   file { "$path/target/start":
   	mode => 744,
-  	owner => $user,
-  	group => $group,
-  	require => [Exec["stage"], File["$path"]]
+  	owner => "$play::apps_user",
+  	group => "$play::apps_group",
+  	require => [Exec["stage"], File["$path/target"]]
   }
 }

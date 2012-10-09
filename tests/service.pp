@@ -1,10 +1,22 @@
 Exec { path => [ "/bin/", "/sbin/" , "/usr/bin/", "/usr/sbin/" ] }
 
-include play
+class {"play":
+	user => "root",
+	group => "root",
+	apps_user => "www-data",
+	apps_group => "www-data",
+}
 
-play::service { "test-app":
+play::service { "test-app-9000":
 	path => "/var/play/test-app",
-	user => "www-data",
-	group => "www-data",
 	require => Class["Play"],
+	port => "9000",
+	address => "0.0.0.0",
+}
+
+play::service { "test-app-9001":
+	path => "/var/play/test-app",
+	require => Class["Play"],
+	port => "9001",
+	address => "0.0.0.0",
 }

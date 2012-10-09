@@ -1,50 +1,47 @@
-Puppet Module For Play
-======================
+Puppet Module For Play 2.0.x
+============================
 
-This module provisions the Play Framework, manages Play modules and Play applications. It supports:
+This module provisions the Play Framework, Play applications. It supports:
 
 * The provisioning of Play Framework in _/opt/play-version_
-* The installation of modules
-* The management of Play applications
 * The configuration of system services to run play applications
+* Stage build of a play application
 
 Using the module
 ----------------
-To use the module, either
-
-* Clone this repository to _/etc/puppet/modules_ (or configure your _modulepath_)
-* Download a pre-packaged version (from the download section)
-
-The module requires a proper Java installation including a valid __JAVA_HOME_ environment variable.
+To use the module, clone this repository to _/etc/puppet/modules_ (or configure your _modulepath_)
 
 Example
 -------
 
-	include play
-	
-	play::module {"mongodb module" :
-	 	module => "mongo-1.3", 
-		require => [Class["play"], Class["mongodb"]]
+	# Provision the default version of the Play Framework and application directory 
+	class {"play":
+		user => "root",
+		group => "root",
+		apps_user => "www-data",
+		apps_group => "www-data",
 	}
 	
-	play::module { "less module" :
-	 	module => "less-0.3",
-		require => Class["play"]
+	# Prebuild and stage the application
+	play::stage { "test-app":
+		path => "/var/play/test-app",
 	}
 	
-	play::application { "bilderverwaltung" :
-		ensure => running,
-		path => "/home/clement/demo/bilderverwaltung",
-		require => [Jdk6["Java6SDK"], Play::Module["mongodb module"]]
+	# Provision two instances of the same application on two different ports for failover,
+	# binding to all network interfaces.
+	play::service { "test-app-9000":
+		path => "/var/play/test-app",
+		require => Class["Play"],
+		port => "9000",
+		address => "0.0.0.0",
 	}
 	
-	#Just create the upstart script, so the service is required
-	play::service { "bilderverwaltung" :
-		path => "/home/clement/demo/bilderverwaltung",
-		require => [Play::Module["mongodb module"]]
+	play::service { "test-app-9001":
+		path => "/var/play/test-app",
+		require => Class["Play"],
+		port => "9001",
+		address => "0.0.0.0",
 	}
-	
-	
 
 
 License

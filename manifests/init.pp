@@ -1,63 +1,63 @@
 # Class: play
 #
 # This module manages play framework applications and modules.
-# The class itself installs Play 2.0.3 in /opt/play-2.0.3
+# The class itself installs Play 2.0.3 in /opt/play-2.0.3. It also
+# prepares a directory for play applications /var/play
 #
 # Actions:
-#  play::module checks the availability of a Play module. It installs
-#  it if not found
-#  play::application starts a play application
-#  play::service starts a play application as a system service
+#  play::service Registers a Play application as a service
 #
 # Parameters:
-# *version* : the Play version to install
+# *version* : the Play (2.0.x) version to install
+# *user* : the user that owns the Play installation
+# *group* : the group that Play installation belongs to
+# *apps_user* : the user that owns Play applications installed by this module
+# *apps_group* : the group the Play applications installed by this module belong to
 #
-# Requires:
-# A proper java installation and JAVA_HOME set
 # Sample Usage:
-#  include play
-#  play::module {"mongodb module" :
-# 	module  => "mongo-1.3", 
-#	require => [Class["play"], Class["mongodb"]]
-#  }
+# See included tests for sample usage
 #
-#  play::module { "less module" :
-# 	module  => "less-0.3",
-#	require => Class["play"]
-#  }
-#
-#  play::service { "bilderverwaltung" :
-#	path    => "/home/clement/demo/bilderverwaltung",
-#	require => [Package { "openjdk-7-jdk", Play::Module["mongodb module"]]
-#  }
-#
-class play ($version = "2.0.3") {
+class play ($version = "2.0.3", $user = "root", $group = "root", $apps_user = "root", $apps_group = "root") {
 	
 	$play_version = $version
 	$play_path = "/opt/play-${play_version}"
+	$apps_home = "/var/play"
 	
-	notice("Play ${play_version}")
+	notice("Play $play_version")
 	
 	exec { "download-play-framework":                                                                                                                     
         command => "wget http://download.playframework.org/releases/play-${play_version}.zip",                                                         
         cwd     => "/tmp",
-        creates => "/tmp/play-${play_version}.zip",                                                              
-		unless  => "test -d $play_path",
-		require => [Package["wget"]]
+        creates => "/tmp/play-${play_version}.zip",
+		require => Package["wget"]
     }
 
 	exec {"unzip-play-framework":
 	    cwd     => "/opt",
         command => "unzip /tmp/play-${play_version}.zip",
-        unless  => "test -d $play_path",
+		creates => "$play_path",
         require => [ Package["unzip"], Exec["download-play-framework"] ],
 	}
+
+	file { "$play_path":
+		ensure  => directory,
+	    owner   => "$user",
+	    group   => "$group",
+	    mode    => 0644,
+		subscribe => Exec["unzip-play-framework"]	    
+	}	
 	
 	file { "$play_path/play":
 		ensure  => file,
-	    owner   => "root",
-	    mode    => "0755",
-		require => [Exec["unzip-play-framework"]]
+	    owner   => "$user",
+	    mode    => 0755,
+		require => File ["$play_path"]
+	}
+	
+	file { "$apps_home":
+		ensure => directory,
+	    owner   => "$apps_user",
+	    group   => "$apps_group",
 	}
 	
 	package { "unzip":
