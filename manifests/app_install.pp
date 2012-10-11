@@ -27,11 +27,12 @@ define play::app_install($source) {
 		command => "$play::play_path/play clean",
 	  	cwd => "$path",
 	  	user => "$play::user",
-	  	require => File["$path"],
+	  	refreshonly => true,
+	  	subscribe => File["$path"],
 	}	
 	
 	# Don't remove the log directory
-	file { "$path/log":
+	file { "$path/logs":
 		ensure => directory,
 	  	owner => "$play::apps_user",
 	  	group => "$play::apps_group",
