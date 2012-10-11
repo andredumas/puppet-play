@@ -5,23 +5,37 @@
 # See included tests for sample usage
 #
 define play::stage {
-  include play
+	include play
   
-  $path = "$play::apps_home/$title"
+	$path = "$play::apps_home/$title"
   
-  exec {"stage":
-  	command => "$play::play_path/play clean compile stage",
-  	cwd => "$path",
-  	user => "$play::user",
-  	creates => "$path/target",
-  	# Takes a really long to to compile on a micro EC2 instance, not sure why just yet
-  	timeout => 1200	
-  }
+	exec {"stage":
+		command => "$play::play_path/play clean compile stage",
+		cwd => "$path",
+		user => "$play::user",
+		creates => "$path/target",
+		# Takes a really long to to compile on a micro EC2 instance, not sure why just yet
+		timeout => 1200	
+	}
   
-  file { "$path/target":
-  	recurse => true,
-  	owner => "$play::apps_user",
-  	group => "$play::apps_group",
-  	require => Exec["stage"]
-  }
+	# Want the target, project/project and project/target directories managed to not emit a 
+	# refresh event if nothing else is different and to ensure user is correct after build
+	file { "$path/target":
+		recurse => true,
+		owner => "$play::apps_user",
+		group => "$play::apps_group",
+		require => Exec["stage"]
+	}
+	file { "$path/project/project":
+		recurse => true,
+	  	owner => "$play::apps_user",
+	  	group => "$play::apps_group",
+	  	require => Exec["stage"]
+	}	
+	file { "$path/project/target":
+		recurse => true,
+	  	owner => "$play::apps_user",
+	  	group => "$play::apps_group",
+	  	require => Exec["stage"]
+	}	  
 }

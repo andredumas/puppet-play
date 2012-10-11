@@ -22,7 +22,7 @@ define play::app_install($source) {
 		force => true,
 	}
 	
-	# Clean any artefacts in the case of a refres/reinstall
+	# Clean any artefacts in the case of a refresh/reinstall
 	exec {"clean":
 		command => "$play::play_path/play clean",
 	  	cwd => "$path",
@@ -33,19 +33,6 @@ define play::app_install($source) {
 	
 	# Don't remove the log directory
 	file { "$path/logs":
-		ensure => directory,
-	  	owner => "$play::apps_user",
-	  	group => "$play::apps_group",
-	}	
-	
-	# Want the project/project and project/target directories managed to not emit a 
-	# refresh event if nothing else is different
-	file { "$path/project/project":
-		ensure => directory,
-	  	owner => "$play::apps_user",
-	  	group => "$play::apps_group",
-	}	
-	file { "$path/project/target":
 		ensure => directory,
 	  	owner => "$play::apps_user",
 	  	group => "$play::apps_group",
