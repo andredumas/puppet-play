@@ -17,11 +17,10 @@
 # Sample Usage:
 # See included tests for sample usage
 #
-class play ($version = "2.0.3", $user = "root", $group = "root", $apps_user = "root", $apps_group = "root") {
+class play ($version = "2.0.3", $user = "root", $group = "root", $apps_user = "root", $apps_group = "root", $apps_home = "/var/play") {
 	
 	$play_version = $version
 	$play_path = "/opt/play-${play_version}"
-	$apps_home = "/var/play"
 	
 	notice("Play $play_version")
 	

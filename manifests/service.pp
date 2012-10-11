@@ -11,13 +11,14 @@
 # Sample Usage:
 # See included tests for sample usage
 #
-define play::service($path, $javaOptions = "", $address = "127.0.0.1", $port = "9000") {
+define play::service($javaOptions = "", $address = "127.0.0.1", $port = "9000") {
 	include play
 	
 	# Make play_home accessible from the template
 	$play_home = $play::play_path
 	$user = $play::apps_user
 	$group = $play::apps_group
+	$path = $play::apps_home/${title}
 	
 	notice("Service: ${title}")
 	
