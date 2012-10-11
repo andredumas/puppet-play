@@ -3,7 +3,17 @@ Play Class
 
 Actions:
 --------
-If not already installed, play 2.0.3 is downloaded and installed into _/opt/play-2.0.3_. 
+If not already installed, play 2.0.4 is downloaded and installed into _/opt/play-2.0.4_. 
+
+Parameters
+----------
+
+* *version* : the Play (2.0.x) version to install
+* *user* : the user that owns the Play installation
+* *group* : the group that Play installation belongs to
+* *apps_user* : the user that owns Play applications installed by this module
+* *apps_group* : the group the Play applications installed by this module belong to
+* *apps_home* : The location to install apps. Defaults to /var/play
 
 Sample Usage:
 -------------
@@ -16,22 +26,25 @@ Sample Usage:
 		apps_group => "www-data",
 	}
 	
-	# Prebuild and stage the application
-	play::stage { "test-app":
-		path => "/var/play/test-app",
+	# Install the application
+	play::app_install { "test-app":
+		source => "/tmp/test-app"
 	}
+	
+	# Prebuild and stage the application
+	play::stage { "test-app": }
 	
 	# Provision two instances of the same application on two different ports for failover,
 	# binding to all network interfaces.
 	play::service { "test-app-9000":
-		path => "/var/play/test-app",
+		app_name => "test-app",
 		require => Class["Play"],
 		port => "9000",
 		address => "0.0.0.0",
 	}
 	
 	play::service { "test-app-9001":
-		path => "/var/play/test-app",
+		app_name => "test-app",
 		require => Class["Play"],
 		port => "9001",
 		address => "0.0.0.0",

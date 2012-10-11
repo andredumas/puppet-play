@@ -8,14 +8,14 @@ class {"play":
 }
 
 play::service { "test-app-9000":
-	path => "/var/play/test-app",
+	app_name => "test-app",
 	require => Class["Play"],
 	port => "9000",
 	address => "0.0.0.0",
 }
 
 play::service { "test-app-9001":
-	path => "/var/play/test-app",
+	app_name => "test-app",
 	require => Class["Play"],
 	port => "9001",
 	address => "0.0.0.0",

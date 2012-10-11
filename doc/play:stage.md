@@ -1,7 +1,7 @@
-play::service
+play::stage
 ==============
 
-Resource representing a Play application started as a service.
+Compiles and prepares a Play application to run in a production environment as a system service.
 
 Actions
 -------
