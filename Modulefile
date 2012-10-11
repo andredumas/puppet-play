@@ -3,7 +3,7 @@ version '1.0.0'
 source 'akquinet'
 author 'Andre Dumas'
 license 'Apache Software License 2.0'
-summary 'Puppet resources to provision Play! applications and modules'
+summary 'Puppet resources to provision Play! applications'
 description "Provision play framework and define applications.
 
 	# Provision the default version of the Play Framework and application directory 
