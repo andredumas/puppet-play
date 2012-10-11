@@ -3,9 +3,9 @@ Puppet Module For Play 2.0.x
 
 This module provisions the Play Framework, Play applications. It supports:
 
-* The provisioning of Play Framework in _/opt/play-version_
+* The provisioning of Play Framework in _/opt/play-$version_
 * The configuration of system services to run play applications
-* Stage build of a play application
+* Install and stage build of a play application
 
 Using the module
 ----------------
