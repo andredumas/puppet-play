@@ -1,0 +1,36 @@
+# NOTE: This file is managed by puppet. While it still can be managed manually,
+#       it's definitely not recommended.
+#
+# Upstart script for Play 2.0 application <%= name %>.
+#
+# Usage:
+#   start play
+#   stop play
+#   restart play
+#
+
+description "<%= name %>"
+author "Andre Dumas"
+version "1.0"
+
+env USER=<%= user %>
+env GROUP=<%= group %>
+env APP_HOME=<%= path %>
+env PLAY_HOME=<%= play_home %>
+env PORT=<%= port %>
+env ADDRESS=<%= address %>
+env EXTRA=<%= javaOptions %>
+
+start on (filesystem and net-device-up IFACE=lo) or runlevel [2345]
+stop on runlevel [!2345]
+
+respawn
+respawn limit 10 5
+umask 022
+expect daemon
+
+pre-start script
+    chdir $APP_HOME
+end script
+
+exec start-stop-daemon --chuid $USER:$GROUP --exec ${APP_HOME}/target/start --background --start -- -Dhttp.port=$PORT -Dhttp.address=$ADDRESS -Dpidfile.path=/dev/null -server $EXTRA

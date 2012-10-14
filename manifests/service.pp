@@ -23,7 +23,7 @@ define play::service($app_name = $title, $javaOptions = "", $address = "127.0.0.
 	notice("Service: ${title}")
 	
 	file { "/etc/init/$title.conf":
-		content => template("play/play-upstart.erb"),
+		content => template("play/etc/init/play-upstart.erb"),
 		mode    => "0644",
 	}
 
