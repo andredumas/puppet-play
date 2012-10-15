@@ -37,5 +37,20 @@ define play::stage {
 	  	owner => "$play::apps_user",
 	  	group => "$play::apps_group",
 	  	require => Exec["stage"]
-	}	  
+	}
+	
+	# Don't remove the log directory
+	file { "$path/logs":
+		ensure => link,
+		target => /var/log/$title,
+	  	require => File["/var/log/$title"],
+	}
+	
+	# Don't remove the log directory
+	file { "/var/log/$title":
+		ensure => directory,
+	  	owner => "$play::apps_user",
+	  	group => "$play::apps_group",
+	  	recurse => true,
+	} 
 }
