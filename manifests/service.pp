@@ -15,9 +15,9 @@ define play::service($app_name = $title, $javaOptions = "", $address = "127.0.0.
 	include play
 	
 	# Make play_home accessible from the template
-	$play_home = $play::play_path
-	$user = $play::apps_user
-	$group = $play::apps_group
+	$play_home = "$play::play_path"
+	$user = "$play::apps_user"
+	$group = "$play::apps_group"
 	$path = "$play::apps_home/$app_name"
 	
 	notice("Service: ${title}")
