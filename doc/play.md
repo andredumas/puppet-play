@@ -3,12 +3,13 @@ Play Class
 
 Actions:
 --------
-If not already installed, play 2.0.4 is downloaded and installed into _/opt/play-2.0.4_. 
+If not already installed, play 2.1.0 is downloaded and installed into _/opt/play-2.1.0_. 
 
 Parameters
 ----------
 
-* *version* : the Play (2.0.x) version to install
+* *version* : the Play (2.x.x) version to install
+* *download* : The location of the play release to download via wget
 * *user* : the user that owns the Play installation
 * *group* : the group that Play installation belongs to
 * *apps_user* : the user that owns Play applications installed by this module

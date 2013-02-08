@@ -1,4 +1,4 @@
-Puppet Module For Play 2.0.x
+Puppet Module For Play 2.x.x
 ============================
 
 This module provisions the Play Framework, Play applications. It supports:
