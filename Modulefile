@@ -1,5 +1,5 @@
 name    'andredumas-play'
-version '1.0.0'
+version '1.1.0'
 source 'akquinet'
 author 'Andre Dumas'
 license 'Apache Software License 2.0'

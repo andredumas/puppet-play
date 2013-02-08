@@ -1,14 +1,15 @@
 # Class: play
 #
 # This module manages play framework applications and modules.
-# The class itself installs Play 2.0.4 in /opt/play-2.0.4. It also
+# The class itself installs Play 2.1.0 in /opt/play-2.1.0. It also
 # prepares a directory for play applications /var/play
 #
 # Actions:
 #  play::service Registers a Play application as a service
 #
 # Parameters:
-# *version* : the Play (2.0.x) version to install
+# *version* : the Play (2.x.x) version to install
+# *download* : The location of the play release to download via wget
 # *user* : the user that owns the Play installation
 # *group* : the group that Play installation belongs to
 # *apps_user* : the user that owns Play applications installed by this module
@@ -18,7 +19,7 @@
 # Sample Usage:
 # See included tests for sample usage
 #
-class play ($version = "2.0.4", $user = "root", $group = "root", $apps_user = "root", $apps_group = "root", $apps_home = "/var/play") {
+class play ($version = "2.1.0", $download = "http://downloads.typesafe.com/play/2.1.0/play-2.1.0.zip", $user = "root", $group = "root", $apps_user = "root", $apps_group = "root", $apps_home = "/var/play") {
 	
 	$play_version = $version
 	$play_path = "/opt/play-$play_version"
@@ -26,7 +27,7 @@ class play ($version = "2.0.4", $user = "root", $group = "root", $apps_user = "r
 	notice("Play $play_version")
 	
 	exec { "download-play-framework":                                                                                                                     
-        command => "wget http://download.playframework.org/releases/play-${play_version}.zip",                                                         
+        command => "wget $download",                                                         
         cwd     => "/tmp",
         creates => "/tmp/play-$play_version.zip",
 		require => Package["wget"]
